@@ -21,12 +21,7 @@ class UserPool(object):
 
     def acquire(self, expires=10):
         """Get a free user, which will expire in `expires` seconds.
-
-        :param expires: Seconds before the user is exipred and recycled for
-            next request.
-        :type expires: :class:`int`
-
-        :return: The user name if available, :data:`None` otherwise.
+        Returns the user name if available, None otherwise.
         """
         now_time = self.current_time()
         for u in self.users:
@@ -36,9 +31,5 @@ class UserPool(object):
                 return u
 
     def release(self, user):
-        """Release the acquired user immediately.
-
-        :param user: The name of acquired user.
-        :type user: :class:`str`
-        """
+        """Release the required user immediately."""
         self._expires[user] = 0

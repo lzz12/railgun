@@ -248,30 +248,3 @@ ul.affix-bottom {
   word-wrap: normal;
   white-space: pre;
 }
-
-/* Tweak chart.js display */
-.chart-panel .panel-body {
-  text-align: center;
-}
-
-.legend {
-  display: inline-block;
-  text-align: left;
-  padding-bottom: 20px;
-}
-
-.legend .title {
-  display: inline;
-  margin: 0.5em 0.6em;
-  border-style: solid;
-  border-width: 0 0 0 1em;
-  padding: 0 0.3em;
-}
-
-/* Tweak admin.scores.html */
-.hw-action {
-  width: 20%;
-}
-.hw-action a.btn {
-  margin-right: 5px;
-}

@@ -44,6 +44,7 @@ import os
 from datetime import datetime
 from xml.etree import ElementTree
 from itertools import ifilter, chain
+import string
 
 from markdown import markdown
 from babel.dates import timedelta, get_timezone
@@ -517,6 +518,9 @@ class Homework(object):
         #: Cache the mapping from language name to :class:`HwCode` object.
         self._lang_to_code = {}
 
+    def set_basetime(self, bt):
+        self.basetime = bt
+
     @staticmethod
     def load(path):
         """Load the definitions of homework under `path`.
@@ -541,6 +545,7 @@ class Homework(object):
         ret = Homework()
         ret.path = path
         ret.slug = os.path.split(path)[1]
+
         tree = ElementTree.parse(os.path.join(path, 'hw.xml'))
 
         for nd in tree.getroot():
@@ -569,12 +574,17 @@ class Homework(object):
                     if not timezone:
                         timezone = config.DEFAULT_TIMEZONE
                     timezone = get_timezone(timezone.strip())
-                    # parse the date string
+                    #parse the date string
+                    # duedate = from_plain_date(
+                    #     datetime.strptime(due.find('date').text.strip(),
+                    #                        '%Y-%m-%d %H:%M:%S'),
+                    #     timezone
+                    # )
+                    from railgun.website.zinsertHw import session, hws, Hw
+                    hw = session.query(Hw).filter(hws.c.uuid == ret.uuid).first()
+                    hwtype=hw.hw_type
                     duedate = from_plain_date(
-                        datetime.strptime(due.find('date').text.strip(),
-                                          '%Y-%m-%d %H:%M:%S'),
-                        timezone
-                    )
+                        hwtype.basetime+timedelta(string.atoi(due.find('date').text.strip())),timezone)
                     # parse the factor
                     scale = float(due.find('scale').text.strip())
                     # add to deadline list

@@ -6,14 +6,12 @@
 # This file is released under BSD 2-clause license.
 
 import csv
-import json
 from functools import wraps
 from cStringIO import StringIO
 
 from flask import (Blueprint, render_template, request, g, flash, redirect,
                    url_for, send_file)
-from flask.ext.babel import gettext as _
-from flask.ext.babel import get_locale, to_user_timezone, lazy_gettext
+from flask.ext.babel import get_locale, lazy_gettext, gettext as _
 from flask.ext.login import login_fresh, current_user
 from sqlalchemy import func
 from sqlalchemy.orm import contains_eager
@@ -26,8 +24,7 @@ from .forms import AdminUserEditForm, CreateUserForm
 from .userauth import auth_providers
 from .credential import login_manager
 from .navibar import navigates, NaviItem
-from .utility import round_score, group_histogram
-from .codelang import languages
+from .utility import round_score
 
 #: A :class:`~flask.Blueprint` object.  All the views for administration
 #: are registered to this blueprint.
@@ -365,44 +362,6 @@ def handins_for_user(username):
     return _show_handins(username)
 
 
-@bp.route('/runqueue/rerun/<handid>/')
-@admin_required
-def runqueue_rerun(handid):
-    """Reset the state of given submission and put it into runqueue again.
-    This operation is only enabled if `config.STORE_UPLOAD` is turned on.
-
-    If the operation is successful, the visitor will be redirected to
-    the query string argument `next`, or :func:`~railgun.website.admin.handins`
-    if `next` is not given.
-
-    :route: /admin/runqueue/rerun/<handid>/
-    :method: GET
-
-    :param handid: The uuid of submission.
-    :type handid: :class:`str`
-    """
-    nexturl = request.args.get('next') or url_for('.handins')
-
-    # Query about the handin record
-    handin = Handin.query.filter(Handin.uuid == handid)
-    handin = handin.first()
-
-    # If not found, result 404
-    if not handin:
-        return _('Submission not found'), 404
-
-    # Get the homework
-    hw = g.homeworks.get_by_uuid(handin.hwid)
-
-    # Now reput the submission into runqueue
-    if not languages[handin.lang].rerun(handid, hw):
-        flash(_('The original submission is not stored.'), 'danger')
-    else:
-        flash(_('Successfully reput the submission into queue!'), 'success')
-
-    return redirect(nexturl)
-
-
 @bp.route('/runqueue/clear/')
 @admin_required
 def runqueue_clear():
@@ -414,10 +373,6 @@ def runqueue_clear():
     :route: /admin/runqueue/clear/
     :method: GET
     """
-
-    # We must not use flask.ext.babel.lazy_gettext, because we'll going to
-    # store it in the database!
-    from railgun.common.lazy_i18n import lazy_gettext
 
     try:
         runner_app.control.discard_all()
@@ -451,9 +406,12 @@ def scores():
     """
     return render_template('admin.scores.html')
 
+@bp.route('/release_hw/')
+@admin_required
+def release_hw():
+    return render_template('admin.release_hw.html')
 
-def _make_csv_report(q, display_headers, raw_headers, pagetitle, filename,
-                     linker=(lambda colid, value: None)):
+def _make_csv_report(q, display_headers, raw_headers, pagetitle, filename):
     def make_record(itm, hdr):
         if isinstance(itm, dict):
             return tuple(itm[h] for h in hdr)
@@ -480,7 +438,6 @@ def _make_csv_report(q, display_headers, raw_headers, pagetitle, filename,
         headers=display_headers,
         items=[make_record(itm, raw_headers) for itm in q],
         pagetitle=pagetitle,
-        linker=linker,
     )
 
 
@@ -551,141 +508,13 @@ def hwscores(hwid):
         for u in users
     ]
 
-    # Link users to their submission page
-    def LinkUser(idx, name):
-        if idx == 0:
-            return url_for('.handins_for_user', username=name)
-
     return _make_csv_report(
         csvdata,
         display_headers,
         raw_headers,
         pagetitle,
-        filename,
-        linker=LinkUser
+        filename
     )
-
-
-@bp.route('/hwcharts/<hwid>/')
-@admin_required
-def hwcharts(hwid):
-    """The admin page to view various of charts of a given homework.
-
-    All users except the administrators will be considered to generate the
-    charts.
-
-    :route: /admin/hwcharts/<hwid>/
-    :method: GET
-    :template: admin.hwcharts.html
-    """
-    ACCEPTED_AND_REJECTED = ('Accepted', 'Rejected')
-    g.scripts.deps('chart.js')
-
-    # Query about given homework
-    hw = g.homeworks.get_by_uuid(hwid)
-    if hw is None:
-        raise NotFound(lazy_gettext('Requested homework not found.'))
-
-    # Query about all the submission for this homework
-    handins = (db.session.query(Handin).join(User).
-               filter(Handin.hwid == hwid).
-               filter(Handin.state.in_(ACCEPTED_AND_REJECTED)).
-               filter(User.is_admin == 0)).all()
-
-    # The date histogram to count everyday submissions.
-    def ListAdd(target, addition):
-        for i, v in enumerate(addition):
-            target[i] += v
-        return target
-
-    date_bucket = {}
-    date_author_bucket = {}
-
-    for obj in handins:
-        dt = to_user_timezone(obj.get_ctime())
-        key = dt.month, dt.day
-        value = (1, int(obj.is_accepted()), int(not obj.is_accepted()))
-
-        # We count the day freq
-        if key in date_bucket:
-            ListAdd(date_bucket[key], value)
-        else:
-            date_bucket[key] = list(value)
-
-        # We count the day author freq
-        if key not in date_author_bucket:
-            date_author_bucket[key] = {obj.user.name}
-        else:
-            date_author_bucket[key].add(obj.user.name)
-
-    date_author_bucket = {k: len(v) for k, v in date_author_bucket.iteritems()}
-
-    # Cache the submission count of each user
-    user_submit_bucket = {}
-
-    for obj in handins:
-        name = obj.user.name
-        value = (1, int(obj.is_accepted()), int(not obj.is_accepted()))
-
-        if name not in user_submit_bucket:
-            user_submit_bucket[name] = list(value)
-        else:
-            ListAdd(user_submit_bucket[name], value)
-
-    # Get the frequency of user submissions
-    user_submit = {}
-    for __, (total, __, __) in user_submit_bucket.iteritems():
-        user_submit.setdefault(total, 0)
-        user_submit[total] += 1
-
-    # Get the score frequency of Accepted submissions
-    user_finalscores = {}
-    for obj in handins:
-        name = obj.user.name
-        score = obj.score or 0.0
-
-        if name not in user_finalscores:
-            user_finalscores[name] = score
-        elif score > user_finalscores[name]:
-            user_finalscores[name] = score
-
-    final_score = group_histogram(
-        user_finalscores.itervalues(),
-        lambda v: round_score(v)
-    )
-
-    # Count the Accepted and Rejected submissions.
-    acc_reject = group_histogram(
-        handins,
-        lambda d: d.state
-    )
-
-    # Count the number of the reasons for Rejected
-    reject_brief = group_histogram(
-        (h for h in handins if not h.is_accepted()),
-        lambda d: unicode(d.result)
-    )
-
-    # Generate the JSON data
-    json_obj = {
-        'day_freq': sorted(date_bucket.items()),
-        'day_author': sorted(date_author_bucket.items()),
-        'acc_reject': [
-            (k, acc_reject.get(k, 0))
-            for k in ACCEPTED_AND_REJECTED
-        ],
-        'reject_brief': sorted(reject_brief.items()),
-        'user_submit': sorted(user_submit.items()),
-        'final_score': [
-            (str(v[0]), v[1])
-            for v in sorted(final_score.items())
-        ],
-    }
-    json_text = json.dumps(json_obj)
-
-    # Render the page
-    return render_template('admin.hwcharts.html', chart_data=json_text,
-                           hw=hw)
 
 # Register the blue print
 app.register_blueprint(bp, url_prefix='/admin')
@@ -708,6 +537,8 @@ navigates.add(
                                endpoint='admin.handins'),
             NaviItem.make_view(title=lazy_gettext('Scores'),
                                endpoint='admin.scores'),
+            NaviItem.make_view(title=lazy_gettext('operation_hw'),
+                               endpoint='admin_operation_hw'),
         ]
     )
 )

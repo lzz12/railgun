@@ -416,7 +416,7 @@ def hwhandins(slug):
     This page supports page navigation, thus accepts `page` and `perpage`
     query string argument, where `page` defines the navigated page id
     (>= 1), and `perpage` defines the page size (default 10).
-
+    
     :route: /homework/<slug>/handin/
     :method: GET
     :template: homework.handins.html
@@ -621,35 +621,45 @@ def about_source():
     return translated_page_source('about')
 
 
-@app.route('/docs/')
-def docs_index():
-    """The index page of the documentation.
+@app.route('/release_hw/<type>/')
+def release_hw(type):
+    from zhwOperation import HwOperation
+    hw = HwOperation(type)
+    hw.release()
+    return redirect(url_for('index'))
 
-    Documentation pages should be placed at `docs/_build/html`.
-    You may generate the documentation files by executing ``make html`` under
-    `docs` directory.
+@app.route('/delete_hw/<type>/')
+def delete_hw(type):
+    from zhwOperation import HwOperation
+    hw = HwOperation(type)
+    hw.delete()
+    return redirect(url_for('index'))   
 
-    :route: /docs/
-    :method: GET
-    """
-    return send_from_directory(
-        os.path.join(app.config['RAILGUN_ROOT'], 'docs/_build/html'),
-        'index.html'
-    )
+@app.route('/admin.operation_hw/')
+def admin_operation_hw():
+    from zinsertHw import session, HwType
+    typeiter=session.query(HwType).all()
+    typelist=[type.type for type in typeiter]
+    return render_template('admin.operation_hw.html',typeList=typelist)
 
+@app.route('/create_hw/')
+def create_hw():
+    return render_template('create_hw.html')
 
-@app.route('/docs/<path:filename>')
-def docs_static(filename):
-    """The static resources of the documentation.
-
-    :route: /docs/
-    :method: GET
-    """
-    return send_from_directory(
-        os.path.join(app.config['RAILGUN_ROOT'], 'docs/_build/html'),
-        filename
-    )
-
+@app.route('/create_hw/next/',methods=['GET', 'POST'])
+def create_hw_next():
+    from zmakexml import XmlManager
+    # from config import HOMEWORK_DIR
+    # import os
+    names=(request.form['type'],request.form['type'])
+    print names
+    deadlines = [{'timezone':request.form['timezone1'],'date':request.form['due1'],'scale':request.form['scale1']},
+                 {'timezone':request.form['timezone2'],'date':request.form['due2'],'scale':request.form['scale2']},                 
+                 {'timezone':request.form['timezone3'],'date':request.form['due3'],'scale':request.form['scale3']},
+                 {'timezone':request.form['timezone4'],'date':request.form['due4'],'scale':request.form['scale4']} ]
+    xml = XmlManager('hw/API/1.xml',names=names,deadlines=deadlines)
+    xml.generateXml()
+    return redirect(url_for('index'))
 
 # Register all pages into navibar
 navigates.add_view(title=lazy_gettext('Home'), endpoint='index')
@@ -694,8 +704,7 @@ navigates.add(
                                endpoint='scores'),
             NaviItem(
                 title=lazy_gettext('Documentation'),
-                url=(app.config['ONLINE_DOC_URL'] or
-                     (lambda: url_for('docs_index'))),
+                url=app.config['ONLINE_DOC_URL'],
                 identity='documentation',
             ),
             NaviItem.make_view(title=lazy_gettext('FAQ'),

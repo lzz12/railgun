@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<div style="background:#f1fafa; position:absolute; top:0; left:0; right:0; bottom:0">
+<h1 align="center">
+    Create New Homework!
+</h1>
+<h3>
+<form name="form" method="POST" action="{{url_for('create_hw_next')}}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+<table align="center" cellspacing=8 cellpadding=6>
+    <tr>
+        <td></td>
+        <td></td>
+        <td><label for="txt">Type</label></td>
+        <td><input type="text" id="type" name="type"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td><label for="txt">Basetime</label></td>
+        <td><input type="text" id="basetime" name="basetime"></td>
+    </tr>
+    <tr>
+        <td><label for="txt">Timezone1</label></td>
+        <td align="center">
+            <select name="timezone1" id="timezone1">
+            <option value="Asia/Shanghai">Asia/Shanghai</option>
+        </td>
+        <td><label for="txt">Due1</label></td>
+        <td><input type="text" id="due1" name="due1"></td>
+        <td><label for="txt">Scale1</label></td>
+        <td><input type="text" id="scale1" name="scale1"></td>
+    </tr>
+    <tr>
+        <td><label for="txt">Timezone2</label></td>
+        <td align="center">
+            <select name="timezone2" id="timezone2">
+            <option value="Asia/Shanghai">Asia/Shanghai</option>
+        </td>
+        <td><label for="txt">Due2</label></td>
+        <td><input type="text" id="due2" name="due2"></td>
+        <td><label for="txt">Scale2</label></td>
+        <td><input type="text" id="scale2" name="scale2"></td>
+    </tr>
+    <tr>
+        <td><label for="txt">Timezone3</label></td>
+        <td align="center">
+            <select name="timezone3" id="timezone3">
+            <option value="Asia/Shanghai">Asia/Shanghai</option>
+        </td>
+        <td><label for="txt">Due3</label></td>
+        <td><input type="text" id="due3" name="due3"></td>
+        <td><label for="txt">Scale3</label></td>
+        <td><input type="text" id="scale3" name="scale3"></td>
+    </tr>
+    <tr>
+        <td><label for="txt">Timezone4</label></td>
+        <td align="center">
+            <select name="timezone4" id="timezone4">
+            <option value="Asia/Shanghai">Asia/Shanghai</option>
+        </td>
+        <td><label for="txt">Due4</label></td>
+        <td><input type="text" id="due4" name="due4"></td>
+        <td><label for="txt">Scale4</label></td>
+        <td><input type="text" id="scale4" name="scale4"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td><label for="txt">Is_hidden</label></td>
+        <td align="center">
+            <select name="hidden">
+            <option value="True">      True    </option>
+            <option value="False">    False    </option>
+        </td>
+    </tr>
+</table>
+<table align="center">
+<tr>
+    <td>
+        <h1>
+            <input type="button" value="Save Hw" onclick="javascript:alert('Succeed！');">
+        </h1>
+    </td>
+</tr>
+<button type="submit" class="btn btn-success">{{ _('1111') }}</button>
+</form>
+</h3>
+</div>
+</html>

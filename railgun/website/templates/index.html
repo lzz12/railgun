@@ -72,5 +72,16 @@
       </tr>
       {%- endfor %}
     </table>
+    {% if current_user.is_admin -%}
+    <table align="center">
+      <tr>
+        <td>
+          <a class="btn btn-primary btn-lg" role="button" href="{{ url_for('create_hw')  }}">
+            {{ _('create new!') }}
+          </a>
+        </td>
+      </tr>
+    </table>
+    {%- endif %}
   {%- endif %}
 {%- endblock %}

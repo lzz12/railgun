@@ -29,6 +29,7 @@ HANDIN_STATES = (_('Pending'), _('Running'), _('Rejected'), _('Accepted'))
 
 
 class User(db.Model):
+
     """A user represents a registered account in Railgun."""
 
     __tablename__ = 'users'
@@ -145,6 +146,7 @@ class User(db.Model):
 
 
 class FinalScore(db.Model):
+
     """A final score stores the highest score among all submissions
     for a particular homework assignment belong to a given user.
     """
@@ -176,6 +178,7 @@ class FinalScore(db.Model):
 
 
 class Handin(db.Model):
+
     """A handin stores the information of a submission from user."""
 
     __tablename__ = 'handins'
@@ -307,6 +310,45 @@ class Handin(db.Model):
         """
         return unicode(self.compile_error) if self.compile_error else u''
 
+#-----------
+
+
+class HwType(db.Model):
+    __tablename__ = 'hwtypes'
+    __table_args__ = {'mysql_engine': 'InnoDB'}
+
+    id = db.Column(
+        db.Integer, db.Sequence('hwtype_id_seq'), primary_key=True)
+    type = db.Column(db.String(32), unique=True)
+    is_hidden = db.Column(db.Boolean, default=True)
+
+    basetime = db.Column(db.DateTime)
+    reltime1 = db.Column(db.Integer)
+    reltime2 = db.Column(db.Integer)
+    reltime3 = db.Column(db.Integer)
+    reltime4 = db.Column(db.Integer)
+
+    def generate_hw(self):
+        pass
+
+
+class Hw(db.Model):
+    __tablename__ = 'hws'
+    __table_args__ = {'mysql_engine': 'InnoDB'}
+
+    id = db.Column(db.Integer, db.Sequence('hw_id_seq'), primary_key=True)
+    uuid = db.Column(db.String(32), unique=True)
+    type_id = db.Column(db.Integer, db.ForeignKey('hwtypes.id'))
+
+
+class UserHw(db.Model):
+    __tablename__ = 'userHw'
+    __table_args__ = {'mysql_engine': 'InnoDB'}
+
+    id = db.Column(
+        db.Integer, db.Sequence('userhomework_id_seq'), primary_key=True)
+    hw_id = db.Column(db.Integer, db.ForeignKey('hws.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 # If the system uses SQL database, we try to create "db" directory.
 if app.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite://'):

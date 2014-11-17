@@ -32,6 +32,7 @@ from .i18n import get_best_locale_name
 
 
 class HwProxy(object):
+
     """Per-request proxy to :class:`~railgun.common.hw.Homework`.
     The best locale for current user will be detected during :meth:`__init__`
     method.
@@ -57,8 +58,7 @@ class HwProxy(object):
         You may put the uuid of locked homework in ``config.LOCKED_HOMEWORKS``.
         If you wish to lock all homework assignments, put a "``*``" in it.
         """
-        return self.hw.uuid in app.config['LOCKED_HOMEWORKS'] or \
-            '*' in app.config['LOCKED_HOMEWORKS']
+        return False
 
     def is_hidden(self):
         """Whether this homework is hidden?
@@ -66,8 +66,8 @@ class HwProxy(object):
         You may put the uuid of hidden homework in ``config.HIDDEN_HOMEWORKS``.
         If you wish to lock all homework assignments, put a "``*``" in it.
         """
-        return self.hw.uuid in app.config['HIDDEN_HOMEWORKS'] or \
-            '*' in app.config['HIDDEN_HOMEWORKS']
+
+        return False
 
     def attach_url(self, lang):
         """Get the attachment url for given programming language.
@@ -97,6 +97,7 @@ class HwProxy(object):
 
 
 class HwSetProxy(object):
+
     """Per-request proxy to :class:`~railgun.common.hw.HwSet`.
     You may hide some homework assignments to the visitor, so a proxy to
     :class:`~railgun.common.hw.HwSet` is necessary.
@@ -107,8 +108,16 @@ class HwSetProxy(object):
 
     def __init__(self, hwset):
         # cache all HwProxy instances
-        self.items = [HwProxy(hw) for hw in hwset]
-
+        # railgun.website.context.db
+        #from .context import db
+        from zinsertHw import session, User, HwType
+        if not current_user.is_anonymous():
+            user = session.query(User).filter_by(id=current_user.id).first()
+            hwuuids = [str(hw.uuid) for hw in user.hws]
+            self.items = [HwProxy(hw) for hw in hwset if hw.uuid in hwuuids]
+            print self.items
+        else:
+            self.items = [HwProxy(hw) for hw in hwset]
         # build slug-to-hw and uuid-to-hw lookup dictionary
         self.__slug_to_hw = {hw.slug: hw for hw in self.items}
         self.__uuid_to_hw = {hw.uuid: hw for hw in self.items}

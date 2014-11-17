@@ -1,0 +1,26 @@
+{% extends "admin.html" %}
+{% block subtitle -%}
+{{ _('Release Homework') }}
+{%- endblock %}
+{% block content -%}
+<table class="table table-hover">
+    <tr>
+        <td>Type</td>
+        <td>Release</td>
+        <td>Delete</td>
+    </tr>
+    {% for hw_type in typeList %}
+    <tr>
+        <td>{{ hw_type }}</td>
+        <td>
+            <a class="btn btn-primary btn-lg" role="button" href="{{ url_for('release_hw',type=hw_type) }}">{{ _('release') }}
+            </a>
+        </td>
+        <td>
+            <a class="btn btn-primary btn-lg" role="button" href="{{ url_for('delete_hw',type=hw_type) }}">{{ _('delete') }}
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{%- endblock %}
