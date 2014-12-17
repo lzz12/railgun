@@ -106,18 +106,21 @@ class HwSetProxy(object):
     :type hwset: :class:`~railgun.common.hw.HwSet`
     """
 
-    def __init__(self, hwset):
+    def __init__(self, hwset, select_all=False):
         # cache all HwProxy instances
-        # railgun.website.context.db
-        #from .context import db
-        from zinsertHw import session, User, HwType
-        if not current_user.is_anonymous():
-            user = session.query(User).filter_by(id=current_user.id).first()
-            hwuuids = [str(hw.uuid) for hw in user.hws]
-            self.items = [HwProxy(hw) for hw in hwset if hw.uuid in hwuuids]
-            print self.items
-        else:
+        if select_all:
             self.items = [HwProxy(hw) for hw in hwset]
+        else:
+            # railgun.website.context.db
+            #from .context import db
+            from zinsertHw import session, User, HwType
+            if not current_user.is_anonymous():
+                user = session.query(User).filter_by(id=current_user.id).first()
+                hwuuids = [str(hw.uuid) for hw in user.hws]
+                self.items = [HwProxy(hw) for hw in hwset if hw.uuid in hwuuids]
+                #print self.items
+            else:
+                self.items = [HwProxy(hw) for hw in hwset]
         # build slug-to-hw and uuid-to-hw lookup dictionary
         self.__slug_to_hw = {hw.slug: hw for hw in self.items}
         self.__uuid_to_hw = {hw.uuid: hw for hw in self.items}
@@ -154,9 +157,11 @@ class HwSetProxy(object):
 homeworks = HwSet(app.config['HOMEWORK_DIR'])
 
 
+
 @app.before_request
 def __inject_flask_g(*args, **kwargs):
     g.homeworks = HwSetProxy(homeworks)
+    g.allhws = HwSetProxy(homeworks, select_all=True)
     # g.utcnow will be used in templates/homework.html to determine some
     # visual styles
     g.utcnow = utc_now()

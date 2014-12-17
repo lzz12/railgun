@@ -319,14 +319,10 @@ class HwType(db.Model):
 
     id = db.Column(
         db.Integer, db.Sequence('hwtype_id_seq'), primary_key=True)
-    type = db.Column(db.String(32), unique=True)
+    type = db.Column(db.String(32),unique=True)
     is_hidden = db.Column(db.Boolean, default=True)
 
     basetime = db.Column(db.DateTime)
-    reltime1 = db.Column(db.Integer)
-    reltime2 = db.Column(db.Integer)
-    reltime3 = db.Column(db.Integer)
-    reltime4 = db.Column(db.Integer)
 
     def generate_hw(self):
         pass

@@ -618,6 +618,10 @@ msgstr "提交"
 msgid "Scores"
 msgstr "得分"
 
+#: railgun/website/admin.py:540
+msgid "operation_hw"
+msgstr "作业"
+
 #: railgun/website/admin.py:260 railgun/website/admin.py:283
 msgid "Build Cache"
 msgstr "创建缓存"
@@ -1178,3 +1182,82 @@ msgstr "创建用户"
 msgid "Create account"
 msgstr "创建账号"
 
+msgid "Release"
+msgstr "发布"
+
+# railgun
+msgid "Quit"
+msgstr "取消"
+
+#: railgun/website/templates/admin.hwcharts.html:2
+#: railgun/website/templates/admin.hwcharts.html:4
+msgid "Statistics for %(hw)s"
+msgstr "“%(hw)s”的图表"
+
+#: railgun/website/templates/admin.hwcharts.html:7
+msgid "Rate of Accepted"
+msgstr "合格率"
+
+#: railgun/website/templates/admin.hwcharts.html:17
+msgid "Reasons for Rejected"
+msgstr "被拒绝的原因"
+
+#: railgun/website/templates/admin.hwcharts.html:27
+msgid "Everyday Submission"
+msgstr "每日提交数"
+
+#: railgun/website/templates/admin.hwcharts.html:37
+msgid "Everyday Submitting Users"
+msgstr "每日提交人数"
+
+#: railgun/website/templates/admin.hwcharts.html:47
+msgid "Submissions Per User"
+msgstr "每用户提交数"
+
+#: railgun/website/templates/admin.hwcharts.html:57
+#: railgun/website/templates/admin.hwcharts.html:74
+msgid "Final Scores"
+msgstr "用户最终成绩"
+
+#: railgun/website/templates/admin.hwcharts.html:73
+msgid "Count of Users"
+msgstr "用户数量"
+
+#: railgun/website/templates/admin.scores.html:12
+msgid "Reports"
+msgstr "报表"
+
+#: railgun/website/templates/admin.scores.html:44
+msgid "Charts"
+msgstr "图表"
+
+#: railgun/website/admin.py:399
+msgid "The original submission is not stored."
+msgstr "没有存储原始提交。"
+
+#: railgun/website/admin.py:401
+msgid "Successfully reput the submission into queue!"
+msgstr "提交已经重新地被放入执行队列！"
+
+#: railgun/website/templates/handin_detail.html:19
+msgid "ReRun"
+msgstr "重新运行"
+
+#: railgun
+msgid "setBaseTime"
+msgstr "设置基准时间"
+
+msgid "Arithmetic API"
+msgstr "数学运算 API"
+
+msgid "Blackbox Test"
+msgstr "黑盒测试"
+
+msgid "Format Path"
+msgstr "格式化路径"
+
+msgid "Whitebox Test"
+msgstr "白盒测试"
+
+msgid "Learn xUnit"
+msgstr "熟悉单元测试"

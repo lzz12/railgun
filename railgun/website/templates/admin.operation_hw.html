@@ -1,26 +1,38 @@
 {% extends "admin.html" %}
+
 {% block subtitle -%}
 {{ _('Release Homework') }}
 {%- endblock %}
 {% block content -%}
 <table class="table table-hover">
     <tr>
-        <td>Type</td>
-        <td>Release</td>
-        <td>Delete</td>
+        <td>{{_('Type')}}</td>
+        <td>{{_('Manage')}}</td>
+        <td>{{_('setBaseTime')}}(yyyy-mm-dd hh-mm-ss)</td>
     </tr>
     {% for hw_type in typeList %}
-    <tr>
-        <td>{{ hw_type }}</td>
-        <td>
-            <a class="btn btn-primary btn-lg" role="button" href="{{ url_for('release_hw',type=hw_type) }}">{{ _('release') }}
-            </a>
-        </td>
-        <td>
-            <a class="btn btn-primary btn-lg" role="button" href="{{ url_for('delete_hw',type=hw_type) }}">{{ _('delete') }}
-            </a>
-        </td>
-    </tr>
+    <form name="form" method="POST" action="{{url_for('release_hw',type=hw_type)}}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <tr>
+            <td>{{_(hw_type)}}</td>
+            {% if hw_type in userhwtypeList %}
+            <td>
+                <a class="btn btn-primary btn-lg" role="button" href="{{ url_for('delete_hw',type=hw_type) }}" onclick="javascript:alert('Cancel Succeed！');">{{ _('Quit') }}
+                </a>
+            </td>
+            <td>
+                <input type="text" disabled="disabled" name="mid1" style="text-align:center;">
+            </td>
+            {% else %}
+            <td>
+               <button type="submit" class="btn btn-primary btn-lg" onclick="javascript:alert('Release Succeed！');">{{ _('Release') }}</button>  
+            </td> 
+            <td>
+                <input type="text" name="mid2" id="mid2" style="text-align:center;">
+            </td>
+            {% endif %}
+        </tr>
+    </form>
     {% endfor %}
 </table>
 {%- endblock %}

@@ -7,7 +7,8 @@
 
 import os
 import uuid
-
+import unicodedata
+from datetime import datetime
 from flask import (render_template, url_for, redirect, flash, request, g,
                    send_from_directory)
 from flask.ext.babel import lazy_gettext, get_locale, gettext as _
@@ -620,46 +621,65 @@ def about_source():
     """
     return translated_page_source('about')
 
-
-@app.route('/release_hw/<type>/')
+@app.route('/release_hw/<type>/',methods=['GET', 'POST'])
 def release_hw(type):
     from zhwOperation import HwOperation
+    from zinsertHw import session, HwType, User
     hw = HwOperation(type)
+    Hwtype = session.query(HwType).filter_by(type=type).first()
+    str=request.form['mid2']
+    line = unicodedata.normalize('NFKD',str).encode('ascii','ignore')
+    Hwtype.basetime = datetime.strptime(str,'%Y-%m-%d %H:%M:%S')
+    session.add(Hwtype)
+    session.flush()
+
+    from hw import homeworks
+    from railgun.common.hw import Homework
+    for hhww in homeworks:
+        hhww.update_basetime()
+    
     hw.release()
-    return redirect(url_for('index'))
+
+    
+    typeiter=session.query(HwType).all()
+    typelist=[type.type for type in typeiter]
+
+    userhwtypelist=[]
+    user=session.query(User).first()
+    for hw in user.hws:
+        userhwtypelist.append(hw.hw_type.type);
+
+    return render_template('admin.operation_hw.html',typeList=typelist,userhwtypeList=userhwtypelist)
 
 @app.route('/delete_hw/<type>/')
 def delete_hw(type):
     from zhwOperation import HwOperation
     hw = HwOperation(type)
     hw.delete()
-    return redirect(url_for('index'))   
+    #flash(_("delete Succeed!"), 'info')
+    #return redirect(url_for('index'))   
+    from zinsertHw import session, HwType, User
+    typeiter=session.query(HwType).all()
+    typelist=[type.type for type in typeiter]
+
+    userhwtypelist=[]
+    user=session.query(User).first()
+    for hw in user.hws:
+        userhwtypelist.append(hw.hw_type.type);
+    return render_template('admin.operation_hw.html',typeList=typelist,userhwtypeList=userhwtypelist)
 
 @app.route('/admin.operation_hw/')
 def admin_operation_hw():
-    from zinsertHw import session, HwType
+    from zinsertHw import session, HwType, User
     typeiter=session.query(HwType).all()
     typelist=[type.type for type in typeiter]
-    return render_template('admin.operation_hw.html',typeList=typelist)
 
-@app.route('/create_hw/')
-def create_hw():
-    return render_template('create_hw.html')
+    userhwtypelist=[]
+    user=session.query(User).first()
+    for hw in user.hws:
+        userhwtypelist.append(hw.hw_type.type);
+    return render_template('admin.operation_hw.html',typeList=typelist,userhwtypeList=userhwtypelist)
 
-@app.route('/create_hw/next/',methods=['GET', 'POST'])
-def create_hw_next():
-    from zmakexml import XmlManager
-    # from config import HOMEWORK_DIR
-    # import os
-    names=(request.form['type'],request.form['type'])
-    print names
-    deadlines = [{'timezone':request.form['timezone1'],'date':request.form['due1'],'scale':request.form['scale1']},
-                 {'timezone':request.form['timezone2'],'date':request.form['due2'],'scale':request.form['scale2']},                 
-                 {'timezone':request.form['timezone3'],'date':request.form['due3'],'scale':request.form['scale3']},
-                 {'timezone':request.form['timezone4'],'date':request.form['due4'],'scale':request.form['scale4']} ]
-    xml = XmlManager('hw/API/1.xml',names=names,deadlines=deadlines)
-    xml.generateXml()
-    return redirect(url_for('index'))
 
 # Register all pages into navibar
 navigates.add_view(title=lazy_gettext('Home'), endpoint='index')

@@ -256,7 +256,6 @@ class AdminUserEditForm(ProfileForm):
     Used in :func:`~railgun.website.admin.user_edit`, where
     :attr:`~ProfileForm.the_user` would be set.
     """
-
     #: Checkbox input representing whether the user is an administrator.
     is_admin = BooleanField(_('Is administrator?'))
 

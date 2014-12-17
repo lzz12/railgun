@@ -6,12 +6,14 @@
 # This file is released under BSD 2-clause license.
 
 import csv
+import json
 from functools import wraps
 from cStringIO import StringIO
 
 from flask import (Blueprint, render_template, request, g, flash, redirect,
                    url_for, send_file)
-from flask.ext.babel import get_locale, lazy_gettext, gettext as _
+from flask.ext.babel import gettext as _
+from flask.ext.babel import get_locale, to_user_timezone, lazy_gettext
 from flask.ext.login import login_fresh, current_user
 from sqlalchemy import func
 from sqlalchemy.orm import contains_eager
@@ -24,7 +26,8 @@ from .forms import AdminUserEditForm, CreateUserForm
 from .userauth import auth_providers
 from .credential import login_manager
 from .navibar import navigates, NaviItem
-from .utility import round_score
+from .utility import round_score, group_histogram
+from .codelang import languages
 
 #: A :class:`~flask.Blueprint` object.  All the views for administration
 #: are registered to this blueprint.
@@ -515,6 +518,129 @@ def hwscores(hwid):
         pagetitle,
         filename
     )
+
+
+
+@bp.route('/hwcharts/<hwid>/')
+@admin_required
+def hwcharts(hwid):
+    """The admin page to view various of charts of a given homework.
+
+    All users except the administrators will be considered to generate the
+    charts.
+
+    :route: /admin/hwcharts/<hwid>/
+    :method: GET
+    :template: admin.hwcharts.html
+    """
+    ACCEPTED_AND_REJECTED = ('Accepted', 'Rejected')
+    g.scripts.deps('chart.js')
+
+    # Query about given homework
+    hw = g.homeworks.get_by_uuid(hwid)
+    if hw is None:
+        raise NotFound(lazy_gettext('Requested homework not found.'))
+
+    # Query about all the submission for this homework
+    handins = (db.session.query(Handin).join(User).
+               filter(Handin.hwid == hwid).
+               filter(Handin.state.in_(ACCEPTED_AND_REJECTED)).
+               filter(User.is_admin == 0)).all()
+
+    # The date histogram to count everyday submissions.
+    def ListAdd(target, addition):
+        for i, v in enumerate(addition):
+            target[i] += v
+        return target
+
+    date_bucket = {}
+    date_author_bucket = {}
+
+    for obj in handins:
+        dt = to_user_timezone(obj.get_ctime())
+        key = dt.month, dt.day
+        value = (1, int(obj.is_accepted()), int(not obj.is_accepted()))
+
+        # We count the day freq
+        if key in date_bucket:
+            ListAdd(date_bucket[key], value)
+        else:
+            date_bucket[key] = list(value)
+
+        # We count the day author freq
+        if key not in date_author_bucket:
+            date_author_bucket[key] = {obj.user.name}
+        else:
+            date_author_bucket[key].add(obj.user.name)
+
+    date_author_bucket = {k: len(v) for k, v in date_author_bucket.iteritems()}
+
+    # Cache the submission count of each user
+    user_submit_bucket = {}
+
+    for obj in handins:
+        name = obj.user.name
+        value = (1, int(obj.is_accepted()), int(not obj.is_accepted()))
+
+        if name not in user_submit_bucket:
+            user_submit_bucket[name] = list(value)
+        else:
+            ListAdd(user_submit_bucket[name], value)
+
+    # Get the frequency of user submissions
+    user_submit = {}
+    for __, (total, __, __) in user_submit_bucket.iteritems():
+        user_submit.setdefault(total, 0)
+        user_submit[total] += 1
+
+    # Get the score frequency of Accepted submissions
+    user_finalscores = {}
+    for obj in handins:
+        name = obj.user.name
+        score = obj.score or 0.0
+
+        if name not in user_finalscores:
+            user_finalscores[name] = score
+        elif score > user_finalscores[name]:
+            user_finalscores[name] = score
+
+    final_score = group_histogram(
+        user_finalscores.itervalues(),
+        lambda v: round_score(v)
+    )
+
+    # Count the Accepted and Rejected submissions.
+    acc_reject = group_histogram(
+        handins,
+        lambda d: d.state
+    )
+
+    # Count the number of the reasons for Rejected
+    reject_brief = group_histogram(
+        (h for h in handins if not h.is_accepted()),
+        lambda d: unicode(d.result)
+    )
+
+    # Generate the JSON data
+    json_obj = {
+        'day_freq': sorted(date_bucket.items()),
+        'day_author': sorted(date_author_bucket.items()),
+        'acc_reject': [
+            (k, acc_reject.get(k, 0))
+            for k in ACCEPTED_AND_REJECTED
+        ],
+        'reject_brief': sorted(reject_brief.items()),
+        'user_submit': sorted(user_submit.items()),
+        'final_score': [
+            (str(v[0]), v[1])
+            for v in sorted(final_score.items())
+        ],
+    }
+    json_text = json.dumps(json_obj)
+
+    # Render the page
+    return render_template('admin.hwcharts.html', chart_data=json_text,
+                           hw=hw)
 
 # Register the blue print
 app.register_blueprint(bp, url_prefix='/admin')

@@ -518,8 +518,25 @@ class Homework(object):
         #: Cache the mapping from language name to :class:`HwCode` object.
         self._lang_to_code = {}
 
-    def set_basetime(self, bt):
-        self.basetime = bt
+        self.idx=None
+
+        self.basetime=None
+
+        self.relativetime=[]
+        self.scales=[]
+
+    def update_basetime(self):
+        self.deadlines=[]
+        from zinsertHw import session, hws, Hw, HwType
+        hw = session.query(Hw).filter(hws.c.uuid== self.uuid).first()
+        hwtype=hw.hw_type
+        self.basetime = hwtype.basetime
+        timezone = config.DEFAULT_TIMEZONE
+        timezone = get_timezone(timezone.strip())
+        for i in range(4):
+            duedate = from_plain_date(
+                        self.basetime+timedelta(self.relativetime[i]), timezone)
+            self.deadlines.append((to_utc_date(duedate), self.scales[i]))
 
     @staticmethod
     def load(path):
@@ -551,6 +568,9 @@ class Homework(object):
         for nd in tree.getroot():
             if nd.tag == 'uuid':
                 ret.uuid = nd.text.strip()
+                from zinsertHw import Hw,session
+                hwx=session.query(Hw.id).filter_by(uuid=ret.uuid).first()[0]
+                ret.idx = hwx
             elif nd.tag == 'names':
                 for name in nd.iter('name'):
                     lang = name.get('lang')
@@ -567,6 +587,9 @@ class Homework(object):
                         solve = file_get_contents(solve_file)
                     ret.info.append(HwInfo(lang, name, desc, solve))
             elif nd.tag == 'deadlines':
+                ret.scales=[]
+                ret.relativetime=[]
+                re.deadlines=[]
                 for due in nd.iter('due'):
                     # get the timezone of due date
                     timezone = due.find('timezone')
@@ -574,21 +597,17 @@ class Homework(object):
                     if not timezone:
                         timezone = config.DEFAULT_TIMEZONE
                     timezone = get_timezone(timezone.strip())
-                    #parse the date string
-                    # duedate = from_plain_date(
-                    #     datetime.strptime(due.find('date').text.strip(),
-                    #                        '%Y-%m-%d %H:%M:%S'),
-                    #     timezone
-                    # )
-                    from railgun.website.zinsertHw import session, hws, Hw
-                    hw = session.query(Hw).filter(hws.c.uuid == ret.uuid).first()
-                    hwtype=hw.hw_type
-                    duedate = from_plain_date(
-                        hwtype.basetime+timedelta(string.atoi(due.find('date').text.strip())),timezone)
+                    
+                    #duedate = from_plain_date(
+                     #   ret.basetime+timedelta(string.atoi(due.find('date').text.strip())),timezone)
+                    #print "ererwerwr"
                     # parse the factor
                     scale = float(due.find('scale').text.strip())
+                    ret.relativetime.append(string.atoi(due.find('date').text.strip()))
+                    ret.scales.append(scale)
+                    #print ret.relativetime
                     # add to deadline list
-                    ret.deadlines.append((to_utc_date(duedate), scale))
+                    #ret.deadlines.append((to_utc_date(duedate), scale))
             elif nd.tag == 'files':
                 ret.file_rules = FileRules.parse_xml(nd)
 

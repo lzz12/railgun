@@ -173,6 +173,10 @@ msgstr ""
 msgid "Scores"
 msgstr ""
 
+#: railgun/website/admin.py:540
+msgid "operation_hw"
+msgstr ""
+
 #: railgun/website/api.py:79
 msgid "No test passed, submission rejected."
 msgstr ""
