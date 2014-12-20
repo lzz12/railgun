@@ -1,0 +1,412 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"sess",
+				"session	(statement)"
+			],
+			[
+				"rea",
+				"relationship	(function)"
+			],
+			[
+				"lo",
+				"LoginManager	(import)"
+			],
+			[
+				"com",
+				"commit"
+			],
+			[
+				"re",
+				"relation	(function)"
+			],
+			[
+				"utc",
+				"utcnow	(function)"
+			],
+			[
+				"date",
+				"DateTime	(class)"
+			],
+			[
+				"sees",
+				"sessionmaker	(class)"
+			],
+			[
+				"new",
+				"newstyle	(module)"
+			],
+			[
+				"sql",
+				"sqlalchemy	(module)"
+			],
+			[
+				"Clo",
+				"Column	(class)"
+			],
+			[
+				"dela",
+				"declarative_base	(function)"
+			],
+			[
+				"de",
+				"declarative	(module)"
+			],
+			[
+				"cre",
+				"create_engine	(function)"
+			],
+			[
+				"SQla",
+				"SQLALCHEMY_MIGRATE_REPO	(import)"
+			],
+			[
+				"ver",
+				"version_control"
+			],
+			[
+				"sq",
+				"SQLALCHEMY_MIGRATE_REPO	(instance)"
+			],
+			[
+				"s",
+				"SQLALCHEMY_MIGRATE_REPO	(statement)"
+			],
+			[
+				"S",
+				"SQLALCHEMY_DATABASE_URI	(statement)"
+			],
+			[
+				"ROLE",
+				"ROLE_USER	(statement)"
+			],
+			[
+				"pa",
+				"path	(module)"
+			],
+			[
+				"open",
+				"openid  (argument)"
+			],
+			[
+				"user",
+				"username"
+			],
+			[
+				"for",
+				"form	(module)"
+			],
+			[
+				"fir",
+				"filter_by"
+			],
+			[
+				"emal",
+				"emails	(statement)"
+			],
+			[
+				"eamil",
+				"emailmapper	(statement)"
+			],
+			[
+				"fi",
+				"filter_by"
+			],
+			[
+				"eam",
+				"emails	(statement)"
+			],
+			[
+				"ema",
+				"emails	(statement)"
+			],
+			[
+				"pass",
+				"password	(statement)"
+			],
+			[
+				"Noe",
+				"None	(keyword)"
+			],
+			[
+				"create",
+				"create_session	(import)"
+			],
+			[
+				"from",
+				"from_obj"
+			],
+			[
+				"creat",
+				"create_engine"
+			],
+			[
+				"pag",
+				"Page	(class)"
+			],
+			[
+				"page",
+				"pagetag_table	(statement)"
+			],
+			[
+				"co",
+				"Column"
+			],
+			[
+				"da",
+				"datetime	(class)"
+			],
+			[
+				"type",
+				"types	(import)"
+			],
+			[
+				"String",
+				"SyntaxWarning	(class)"
+			],
+			[
+				"e",
+				"en_US"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 150.0,
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"list",
+				"Package Control: List Packages"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 536.0
+	},
+	"console":
+	{
+		"height": 146.0,
+		"history":
+		[
+			". venv/bin/activate",
+			"python t0.py",
+			"print \"hello world\"",
+			"open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())",
+			"urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) );",
+			"ipp = sublime.installed_packages_path();",
+			"import urllib.request,os; pf = 'Package Control.sublime-package';"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/xl/learning/myproject/flaskr/tmp/flaskr.db",
+		"/home/xl/learning/myproject/flaskr/flaskr.py",
+		"/home/xl/learning/myproject/microblog/run.py",
+		"/home/xl/learning/myproject/microblog/app/templates/base.html",
+		"/home/xl/learning/myproject/microblog/app/templates/login.html",
+		"/home/xl/learning/myproject/microblog/app/templates/index.html",
+		"/home/xl/learning/myproject/microblog/app/form.py",
+		"/home/xl/learning/myproject/microblog/app/__init__.py",
+		"/home/xl/learning/myproject/microblog/app/models.py",
+		"/home/xl/learning/myproject/microblog/db_create.py",
+		"/home/xl/learning/myproject/microblog/config.py",
+		"/home/xl/learning/myproject/microblog/app/views.py",
+		"/home/xl/learning/myproject/newstyle.py",
+		"/home/xl/learning/myproject/newstyle2.py",
+		"/home/xl/learning/myproject/microblog/db_migrate.py",
+		"/home/xl/learning/myproject/firststep.py",
+		"/home/xl/learning/myproject/mapper2.py",
+		"/home/xl/learning/myproject/session.py",
+		"/home/xl/learning/myproject/microblog/app/db_create.py",
+		"/home/xl/learning/myproject/microblog/app/config.py",
+		"/home/xl/learning/myproject/manytomany2.py",
+		"/home/xl/learning/myproject/manytomany.py",
+		"/home/xl/learning/myproject/mapper1.py",
+		"/home/xl/learning/myproject/join_select.py",
+		"/home/xl/learning/myproject/joindemo.py",
+		"/home/xl/learning/myproject/selectdemo.py",
+		"/home/xl/learning/myproject/sql4.py",
+		"/home/xl/learning/myproject/object_test.py",
+		"/home/xl/learning/myproject/model.py",
+		"/home/xl/learning/myproject/sql1.py",
+		"/home/xl/learning/myproject/sql2.py",
+		"/home/xl/learning/myproject/sql3.py",
+		"/home/xl/learning/myproject/hello.py",
+		"/home/xl/learning/myproject/application.py",
+		"/home/xl/learning/myproject/templates/hello.html",
+		"/home/xl/learning/myproject/templates/error.html",
+		"/home/xl/桌面/t0.py",
+		"/home/xl/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+		"/home/xl/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/xl/桌面/short_cut.txt",
+		"/home/xl/.config/sublime-text-3/Packages/User/ConvertToUTF8.sublime-settings"
+	],
+	"find":
+	{
+		"height": 30.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"()",
+			"schema",
+			"')\n",
+			"\"",
+			"sys"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 30.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "users.sublime-project",
+	"replace":
+	{
+		"height": 56.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"db_",
+				"~/learning/myproject/microblog/db_migrate.py"
+			],
+			[
+				"__",
+				"~/learning/myproject/microblog/app/__init__.py"
+			],
+			[
+				"f",
+				"~/learning/myproject/microblog/app/form.py"
+			],
+			[
+				"v",
+				"~/learning/myproject/microblog/app/views.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
