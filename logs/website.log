@@ -1,0 +1,26 @@
+2014-11-14 05:18:04,680 [INFO] HwCacheTask: start building hwcache ...
+2014-11-14 05:18:04,711 [INFO] HwCacheTask: hwpack "/home/lzz12/railgun/hw/.pack/xunit/python.zip": ok.
+2014-11-14 05:18:04,712 [INFO] HwCacheTask: hwstatic "/home/lzz12/railgun/hw/.static/xunit": ok.
+2014-11-14 05:18:04,754 [INFO] HwCacheTask: hwstatic "/home/lzz12/railgun/hw/.static/black_box": ok.
+2014-11-14 05:18:04,784 [INFO] HwCacheTask: hwpack "/home/lzz12/railgun/hw/.pack/white_box/python.zip": ok.
+2014-11-14 05:18:04,784 [INFO] HwCacheTask: hwstatic "/home/lzz12/railgun/hw/.static/white_box": ok.
+2014-11-14 05:18:04,804 [INFO] HwCacheTask: hwpack "/home/lzz12/railgun/hw/.pack/reform_path/python.zip": ok.
+2014-11-14 05:18:04,804 [INFO] HwCacheTask: hwstatic "/home/lzz12/railgun/hw/.static/reform_path": ok.
+2014-11-14 05:18:04,809 [INFO] HwCacheTask: hwpack "/home/lzz12/railgun/hw/.pack/arith_api/netapi.zip": ok.
+2014-11-14 05:18:04,810 [INFO] HwCacheTask: hwstatic "/home/lzz12/railgun/hw/.static/arith_api": ok.
+2014-11-14 05:18:04,810 [INFO] TzCacheTask: start building tzcache ...
+2014-11-14 05:18:04,950 [INFO] TzCacheTask: tzcache "/home/lzz12/railgun/railgun/website/static/tz/en.json": ok.
+2014-11-14 05:18:04,962 [INFO] TzCacheTask: tzcache "/home/lzz12/railgun/railgun/website/static/tz/zh_Hans_CN.json": ok.
+2014-11-14 05:18:35,493 [INFO] HwCacheTask: start building hwcache ...
+2014-11-14 05:18:35,524 [INFO] HwCacheTask: hwpack "/home/lzz12/railgun/hw/.pack/xunit/python.zip": ok.
+2014-11-14 05:18:35,525 [INFO] HwCacheTask: hwstatic "/home/lzz12/railgun/hw/.static/xunit": ok.
+2014-11-14 05:18:35,563 [INFO] HwCacheTask: hwstatic "/home/lzz12/railgun/hw/.static/black_box": ok.
+2014-11-14 05:18:35,591 [INFO] HwCacheTask: hwpack "/home/lzz12/railgun/hw/.pack/white_box/python.zip": ok.
+2014-11-14 05:18:35,592 [INFO] HwCacheTask: hwstatic "/home/lzz12/railgun/hw/.static/white_box": ok.
+2014-11-14 05:18:35,608 [INFO] HwCacheTask: hwpack "/home/lzz12/railgun/hw/.pack/reform_path/python.zip": ok.
+2014-11-14 05:18:35,608 [INFO] HwCacheTask: hwstatic "/home/lzz12/railgun/hw/.static/reform_path": ok.
+2014-11-14 05:18:35,614 [INFO] HwCacheTask: hwpack "/home/lzz12/railgun/hw/.pack/arith_api/netapi.zip": ok.
+2014-11-14 05:18:35,614 [INFO] HwCacheTask: hwstatic "/home/lzz12/railgun/hw/.static/arith_api": ok.
+2014-11-14 05:18:35,614 [INFO] TzCacheTask: start building tzcache ...
+2014-11-14 05:18:35,746 [INFO] TzCacheTask: tzcache "/home/lzz12/railgun/railgun/website/static/tz/en.json": ok.
+2014-11-14 05:18:35,757 [INFO] TzCacheTask: tzcache "/home/lzz12/railgun/railgun/website/static/tz/zh_Hans_CN.json": ok.

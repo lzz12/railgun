@@ -1,0 +1,17 @@
+[2014-11-19 05:22:48,485: WARNING/MainProcess] celery@lzz12 ready.
+[2014-11-19 05:22:49,255: WARNING/Worker-1] railgun.runner.tasks.run_python[b6c9f290-b74b-40c3-898b-9b21f4a23d07]: Submission[cb92d61e01a14a09a6ea2224d264a9db] of hw[69e937823ac04e0fbe8cfefd0bb197ab]: Internal server error..
+[2014-11-19 05:22:50,553: WARNING/Worker-1] railgun.runner.tasks.run_python[0f19bb0e-04e6-441f-9b32-e95d2b226ea4]: Submission[a1f1f5fbd8bd4f1a819b4f14fc983219] of hw[bfff167aaf2a471a9bc4d2cb56c15ee3]: Error.
+  stdout: u''
+  stderr: u'/bin/sh: 1: /home/lzz12/railgun/SafeRunner: not found\n'
+[2014-11-20 15:40:28,330: WARNING/MainProcess] celery@lzz12 ready.
+[2014-11-20 15:40:30,252: WARNING/Worker-1] railgun.runner.tasks.run_python[96d45ea1-9d58-45a9-8fcf-215627c79cf3]: Submission[4a9415995cae478d9a6c109cc5c6c3e2] of hw[bfff167aaf2a471a9bc4d2cb56c15ee3]: Error.
+  stdout: u''
+  stderr: u'/bin/sh: 1: /home/lzz12/railgun_final/SafeRunner: not found\n'
+[2014-11-20 15:41:37,202: WARNING/MainProcess] celery@lzz12 ready.
+[2014-11-20 15:42:19,763: WARNING/Worker-1] railgun.runner.tasks.run_python[35df83eb-9dc3-4a9d-968f-8472b94a5cca]: Submission[61ea3b87212441e89060635334276988] of hw[bfff167aaf2a471a9bc4d2cb56c15ee0]: Error.
+  stdout: u''
+  stderr: u'/bin/sh: 1: /home/lzz12/railgun_final/SafeRunner: not found\n'
+[2014-12-21 01:23:28,161: WARNING/MainProcess] celery@lzz12 ready.
+[2014-12-21 01:24:08,764: WARNING/Worker-1] railgun.runner.tasks.run_python[94652008-892e-4ab6-a330-85652984bec5]: Submission[7cd7e27dc5e440bdb6b22ffa48840065] of hw[69e937823ac04e0fbe8cfefd0bb197ae]: Error.
+  stdout: u''
+  stderr: u'/bin/sh: 1: /home/lzz12/railgun_final/SafeRunner: not found\n'
